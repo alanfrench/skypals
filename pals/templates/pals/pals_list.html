@@ -1,0 +1,9 @@
+{% extends 'pals/base.html' %}
+
+{% block content %}
+    {% for pal in pals %}
+        <div class="pal">
+            <h1>{{ pal.name }}</h1>
+        </div>
+    {% endfor %}
+{% endblock %}  
