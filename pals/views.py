@@ -12,3 +12,6 @@ def pals_list(request):
 def pal_profile(request,name):
     pal = get_object_or_404(Pal,name=name)
     return render(request, 'pals/pal_profile.html', {'pal':pal})
+
+def quizView(request):
+    return render(request, 'pals/quiz.html')
