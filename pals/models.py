@@ -54,3 +54,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.answer_text
+
+# essentially a house for a list of questions
+class Quiz(models.Model):
+    name=models.CharField(max_length=100)
+    questions=models.ManyToManyField(Question)
+    slug=models.SlugField() #use slug for clean urls
+
+    def __str__(self):
+        return self.name

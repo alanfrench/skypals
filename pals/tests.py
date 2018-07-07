@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Pal, Question, Answer
+from .models import Pal, Question, Answer, Quiz
 from django.urls import reverse
 
 # Create your tests here.
@@ -34,3 +34,24 @@ class AnswerModelTests(TestCase):
         question = create_question('citizenship', text, 'morality')
         answer = create_answer(question, 'The best.')
         self.assertIn(answer, question.get_answers())
+
+def create_quiz(name, questions):
+    quiz = Quiz.objects.create(name=name)
+    for question in questions:
+        quiz.questions.add(question)
+    return quiz
+
+class QuizModelTests(TestCase):
+
+    def test_can_make_quiz(self):
+        questions = []
+        names = 'abc'
+        answers = ['yes', 'greatsword', 'no']
+        topics = ['morality', 'fighting', 'love']
+        texts = ['are you a criminal?','weapon of choice?','wanna get married?']
+        for i in range(3):
+            q=create_question(names[i], texts[i], topics[i])
+            questions.append(q)
+            create_answer(q, answers[i])
+        quizeroo = create_quiz('quizeroo', questions)
+        self.assertIsInstance(quizeroo, Quiz)
