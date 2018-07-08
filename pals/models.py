@@ -22,20 +22,9 @@ class Question(models.Model):
     # what are we asking about?
     topic = models.CharField(max_length=100)
 
-    def answer_question(self): # this might be handled by django forms
-        # only allow answer submission if something is chosen
-        # answers = self.get_answers
-        # count = 0
-        # for answer in answers:
-        #     if answer.selected:
-        #         chosen_one = answer
-        #         count += 1 
-        # if count != 1:
-        #     pass
-            # return error message and dont leave the page
-        # store answer in topic of ideal_character
-        return 
-
+    def __str__(self):
+        return self.question_text
+    
     def get_answers(self): # which answers are for this question?
         answers = []
         allAnswers = Answer.objects.all()
@@ -50,9 +39,6 @@ class Question(models.Model):
         for answer in answer_objects:
             answers.append(answer.answer_text)
         return answers
-
-    def __str__(self):
-        return self.question_text
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
