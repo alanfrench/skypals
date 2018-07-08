@@ -44,6 +44,13 @@ class Question(models.Model):
                 answers.append(answer)
         return answers
 
+    def get_answer_text(self):
+        answers = []
+        answer_objects = self.get_answers()
+        for answer in answer_objects:
+            answers.append(answer.answer_text)
+        return answers
+
     def __str__(self):
         return self.question_text
 
@@ -68,9 +75,11 @@ class Quiz(models.Model):
         verbose_name_plural = 'Quizzes' # or admin site says 'Quizs'
 
     def get_current_question(self):
+        question = self.questions.all()[self.counter]
+        return question
+
+    def go_to_next_question(self):
         if self.counter >= len(self.questions.all()):
             self.counter = 0 
             return
-        question = self.questions.all()[self.counter]
         self.counter += 1
-        return question

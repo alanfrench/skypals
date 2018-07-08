@@ -1,0 +1,20 @@
+{% extends 'pals/base.html' %}
+
+{% block content %}
+    <header class="masthead">
+      <div class="intro-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h1 class="heading">{{form.question.question_text}}</h1>
+              <form action="{% url 'index' %}" method="post">
+              {% csrf_token %}
+              <ul>{{ form }}</ul>
+              <input type="submit" value="Submit" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+{% endblock %}

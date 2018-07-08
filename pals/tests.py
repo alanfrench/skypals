@@ -33,6 +33,16 @@ class QuestionModelTests(TestCase):
         answers = question.get_answers()
         self.assertEqual(answers, answer_list)
 
+    def test_get_answer_text(self):
+        text = 'Are you a good citizen?'
+        question = create_question('citizenship', text, 'morality')
+        answer_list = []
+        answer_list.append(create_answer(question, 'nah'))
+        answer_list.append(create_answer(question, 'sure'))
+        answers = question.get_answer_text()
+        self.assertEqual(answers[0], 'nah')
+        self.assertEqual(answers[1], 'sure')        
+
 def create_answer(question, answer_text):
     return Answer.objects.create(question=question, answer_text=answer_text)
 
@@ -77,4 +87,5 @@ class QuizModelTests(TestCase):
         questions = Question.objects.all()
         quizerooni = create_quiz('quizerooni', questions)
         self.assertEqual(questions[0], quizerooni.get_current_question())
+        quizerooni.go_to_next_question()
         self.assertEqual(questions[1], quizerooni.get_current_question())
