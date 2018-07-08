@@ -60,6 +60,17 @@ class Quiz(models.Model):
     name=models.CharField(max_length=100)
     questions=models.ManyToManyField(Question)
     slug=models.SlugField() #use slug for clean urls
+    counter=0 #keeps track of the current question
 
     def __str__(self):
         return self.name
+    class Meta:
+        verbose_name_plural = 'Quizzes' # or admin site says 'Quizs'
+
+    def get_current_question(self):
+        if self.counter >= len(self.questions.all()):
+            self.counter = 0 
+            return
+        question = self.questions.all()[self.counter]
+        self.counter += 1
+        return question

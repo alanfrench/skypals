@@ -1,5 +1,4 @@
 {% extends 'pals/base.html' %}
-{% extends 'pals/base.html'}
 
 {% load staticfiles %}
 
@@ -12,7 +11,7 @@
             <div class="col-lg-8 mx-auto">
               <h1 class="brand-heading">SkyPals</h1>
               <p class="intro-text">Find your follower</p>
-              <a href="{% url 'quiz' %}" class="btn btn-circle"></a>
+              <a href="{% url 'quizView' default_quiz %}" class="btn btn-circle"></a>
             </div>
           </div>
         </div>

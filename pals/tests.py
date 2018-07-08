@@ -24,6 +24,15 @@ class QuestionModelTests(TestCase):
         question = create_question('citizenship', text, 'morality')
         self.assertIsInstance(question, Question)
 
+    def test_get_answers_method(self):
+        text = 'Are you a good citizen?'
+        question = create_question('citizenship', text, 'morality')
+        answer_list = []
+        answer_list.append(create_answer(question, 'nah'))
+        answer_list.append(create_answer(question, 'sure'))
+        answers = question.get_answers()
+        self.assertEqual(answers, answer_list)
+
 def create_answer(question, answer_text):
     return Answer.objects.create(question=question, answer_text=answer_text)
 
@@ -41,9 +50,7 @@ def create_quiz(name, questions):
         quiz.questions.add(question)
     return quiz
 
-class QuizModelTests(TestCase):
-
-    def test_can_make_quiz(self):
+def create_question_set(): # also makes their answers
         questions = []
         names = 'abc'
         answers = ['yes', 'greatsword', 'no']
@@ -53,5 +60,21 @@ class QuizModelTests(TestCase):
             q=create_question(names[i], texts[i], topics[i])
             questions.append(q)
             create_answer(q, answers[i])
+        return questions
+
+class QuizModelTests(TestCase):
+
+    def test_can_make_quiz(self):
+        questions = create_question_set()
         quizeroo = create_quiz('quizeroo', questions)
         self.assertIsInstance(quizeroo, Quiz)
+        self.assertIsInstance(quizeroo.questions.all()[0], Question) 
+
+    def test_get_current_question_method(self):
+        if len(Question.objects.all()) == 0:
+            create_question_set() 
+        
+        questions = Question.objects.all()
+        quizerooni = create_quiz('quizerooni', questions)
+        self.assertEqual(questions[0], quizerooni.get_current_question())
+        self.assertEqual(questions[1], quizerooni.get_current_question())

@@ -6,8 +6,12 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <h1 class="heading">QUESTION:</h1>
-              <p class="intro-text">list of answers</p>
+              <h1 class="heading">{{question.question_text}}</h1>
+              {% for answer in question.get_answers %}
+                <!-- <p class="intro-text">{{ answer.answer_text }}</p> -->
+                <input type="radio" name="answer" id="answer{{ forloop.counter }}" value="{{ answer.pk }}" />
+                <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br />
+              {% endfor %}            
             </div>
           </div>
         </div>

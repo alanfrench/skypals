@@ -10,6 +10,7 @@ from . import views
 urlpatterns = [
     path('', views.indexView, name='index'),
     path('quiz/', views.quizView, name='quiz'),
+    path('quiz/<str:default_quiz>', views.quizView, name='quizView'),
     path('pals/', views.pals_list, name='pals_list'),
     path('pals/pal/<str:name>', views.pal_profile, name='pal_profile'),
 ]
