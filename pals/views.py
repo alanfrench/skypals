@@ -17,12 +17,13 @@ def pal_profile(request,name):
     pal = get_object_or_404(Pal,name=name)
     return render(request, 'pals/pal_profile.html', {'pal':pal})
 
-def quizView(request, default_quiz):
-    quiz = get_object_or_404(Quiz, name=default_quiz)
+def quizView(request):
+    quiz = get_object_or_404(Quiz, name='default')
     return render(request, 'pals/quiz.html',
-        {'question':quiz.get_current_question()})
+        {'question':quiz.get_current_question(), 'quiz':quiz})
 
 def questionView(request, name):
-    question = get_object_or_404(Question, name=name)
+    quiz = get_object_or_404(Quiz, name=name)
+    question = quiz.get_current_question()
     form  = QuestionForm(question)
-    return render(request, 'pals/question.html', {'question':question,'form':form})
+    return render(request, 'pals/question.html', {'form':form, 'quiz':quiz})
