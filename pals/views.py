@@ -31,7 +31,8 @@ def questionView(request, name):
     if 'counter' not in request.session:
         request.session['counter'] = 0
     elif request.session['done']:
-        return palProfile(request, "Lydia")
+        palName = getPal(request)
+        return palProfile(request, palName)
     quiz = get_object_or_404(Quiz, name=name)
     counter = request.session.get('counter')
     question, done = quiz.getQuestion(counter)
@@ -40,6 +41,13 @@ def questionView(request, name):
     counter += 1
     request.session['counter'] = counter
     return render(request, 'pals/question.html', {'form':form, 'quiz':quiz})
+
+def getPal(request):
+    """get ideal pal as defined by the current session and find which pal
+    in the total list of pals matches the criteria best
+    """
+    palName = "Lydia"
+    return palName
 
 def quizTakeView(FormView):
     form_class = QuestionForm
