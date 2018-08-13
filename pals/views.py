@@ -10,13 +10,13 @@ def indexView(request):
     default_quiz = get_object_or_404(Quiz, name='default')
     return render(request, 'pals/index.html', {'default_quiz':default_quiz})
 
-def pals_list(request):
+def palsList(request):
     pals = Pal.objects.all()
-    return render(request,'pals/pals_list.html',{'pals':pals})
+    return render(request,'pals/palsList.html',{'pals':pals})
 
-def pal_profile(request,name):
+def palProfile(request,name):
     pal = get_object_or_404(Pal,name=name)
-    return render(request, 'pals/pal_profile.html', {'pal':pal})
+    return render(request, 'pals/palProfile.html', {'pal':pal})
 
 def quizView(request):
     """clean session variables and get the quiz/questions"""
@@ -31,7 +31,7 @@ def questionView(request, name):
     if 'counter' not in request.session:
         request.session['counter'] = 0
     elif request.session['done']:
-        return indexView(request)
+        return palProfile(request, "Lydia")
     quiz = get_object_or_404(Quiz, name=name)
     counter = request.session.get('counter')
     question, done = quiz.getQuestion(counter)

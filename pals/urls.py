@@ -11,6 +11,6 @@ urlpatterns = [
     path('', views.indexView, name='index'),
     path('quiz/', views.quizView, name='quizView'),
     path('quiz/<str:name>/', views.questionView, name='questionView'),
-    path('pals/', views.pals_list, name='pals_list'),
-    path('pals/pal/<str:name>', views.pal_profile, name='pal_profile'),
+    path('pals/', views.palsList, name='palsList'),
+    path('pals/pal/<str:name>', views.palProfile, name='palProfile'),
 ]

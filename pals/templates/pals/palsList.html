@@ -3,7 +3,7 @@
 {% block content %}
     {% for pal in pals %}
         <div class="pal">
-            <h1> <a href="{% url 'pal_profile' name=pal.name %}">{{ pal.name }}</a></h1>
+            <h1> <a href="{% url 'palProfile' name=pal.name %}">{{ pal.name }}</a></h1>
         </div>
     {% endfor %}
 {% endblock %}  

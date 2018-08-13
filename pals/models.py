@@ -65,5 +65,5 @@ class Quiz(models.Model):
         """
         questions = list(self.questions.all())
         question = questions[counter]
-        done = (counter + 1 >= len(questions))
+        done = (counter + 1  >= len(questions))
         return question, done
