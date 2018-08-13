@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# Create your models here.
 class Pal(models.Model):
     name = models.CharField(max_length=20)
     # 0 means they're happy criminals, 3 means they're good citizens
@@ -48,24 +47,23 @@ class Answer(models.Model):
     def __str__(self):
         return self.answer_text
 
-# essentially a house for a list of questions
 class Quiz(models.Model):
     name=models.CharField(max_length=100)
     questions=models.ManyToManyField(Question)
     slug=models.SlugField() #use slug for clean urls
-    counter=0 #keeps track of the current question
 
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name_plural = 'Quizzes' # or admin site says 'Quizs'
 
-    def get_current_question(self):
-        question = self.questions.all()[self.counter]
-        return question
-
-    def go_to_next_question(self):
-        if self.counter >= len(self.questions.all()):
-            self.counter = 0 
-            return
-        self.counter += 1
+    def getQuestion(self, counter):
+        """takes a counter (which item in the list we're on) and returns the
+        corresponding question, as well as whether or not there are more 
+        questions left
+        """
+        questions = list(self.questions.all())
+        question = questions[counter]
+        done = (counter + 1 >= len(questions))
+        return question, done
