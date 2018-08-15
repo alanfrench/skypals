@@ -28,6 +28,13 @@ def questionView(request, name):
     """first check if session is new and initialize any necessary variables, 
     then get the question and increment the counter
     """
+
+    # if request.method == 'POST':
+    #     form = QuestionForm(request.POST)
+    #     if form.is_valid():
+    #         data = form.cleaned_data
+    #         print(data)
+
     if 'counter' not in request.session:
         request.session['counter'] = 0
     elif request.session['done']:
@@ -48,7 +55,3 @@ def getPal(request):
     """
     palName = "Lydia"
     return palName
-
-def quizTakeView(FormView):
-    form_class = QuestionForm
-    template_name = 'questionView.html'

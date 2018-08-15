@@ -9,6 +9,7 @@ class QuestionForm(forms.Form):
         super(QuestionForm, self).__init__(*args, **kwargs)
         if question is not None:
             self.question = question
-            choice_list = [(choice.pk, choice) for choice in question.get_answers()]
+            choice_list = [(choice.pk, choice) 
+                                for choice in question.get_answers()]
             self.fields["answers"] = forms.ChoiceField(choices=choice_list,
                                                             widget=RadioSelect)
