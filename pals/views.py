@@ -22,6 +22,7 @@ def quizView(request):
     """clean session variables and get the quiz/questions"""
     request.session.clear()
     quiz = get_object_or_404(Quiz, name='default')
+    # create_session_pal(request)
     return render(request, 'pals/quiz.html', {'quiz':quiz})
 
 def questionView(request, name):
@@ -37,9 +38,17 @@ def questionView(request, name):
 
     if 'counter' not in request.session:
         request.session['counter'] = 0
-    elif request.session['done']:
+    if 'done' not in request.session:
+        request.session['done'] = False
+
+    if request.method == "POST":
+        print(request.read())
+
+    if request.session['done']:
         palName = getPal(request)
         return palProfile(request, palName)
+
+
     quiz = get_object_or_404(Quiz, name=name)
     counter = request.session.get('counter')
     question, done = quiz.getQuestion(counter)
@@ -55,3 +64,14 @@ def getPal(request):
     """
     palName = "Lydia"
     return palName
+
+
+ ######################################################################
+ # Functions for handling the users ideal pal
+ ######################################################################
+def create_session_pal(request):
+    request.session['session_pal'] = Pal()
+
+def update_session_pal(request, topic, field):
+    current_pal = request.session['session_pal']
+    current_pal[topic] = field

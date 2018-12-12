@@ -23,6 +23,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_text
+
+    def get_topic(self):
+        return self.topic
     
     def get_answers(self): # which answers are for this question?
         answers = []
@@ -36,15 +39,22 @@ class Question(models.Model):
         answers = []
         answer_objects = self.get_answers()
         for answer in answer_objects:
-            answers.append(answer.answer_text)
+            answers.append(answer.get_text)
         return answers
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer_text = models.CharField(max_length=200)
+    answer_text = models.CharField(max_length=200) # what the answer says
+    answer_field = models.CharField(max_length=30) # what the database sees
 
     def __str__(self):
         return self.answer_text
+
+    def get_text(self):
+        return self.answer_text
+
+    def get_field(self):
+        return self.answer_field
 
 class Quiz(models.Model):
     name=models.CharField(max_length=100)
