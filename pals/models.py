@@ -69,10 +69,12 @@ class Quiz(models.Model):
 
     def getQuestion(self, counter):
         """takes a counter (which item in the list we're on) and returns the
-        corresponding question, as well as whether or not there are more 
-        questions left
+        corresponding question
         """
         questions = list(self.questions.all())
         question = questions[counter]
-        done = (counter + 1  >= len(questions))
-        return question, done
+        return question
+
+    def noMoreQuestions(self, counter):
+        """returns whether there are more questions"""
+        return counter >= len(self.questions.all())

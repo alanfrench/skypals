@@ -30,14 +30,13 @@ def questionView(request, name):
     """first check if session is new and initialize any necessary variables, 
     then get the question and increment the counter
     """
-
-    if request.session['done']:
-        palName = getPal(request)
-        return palProfile(request, palName)
-
+    print("new view call")
     quiz = get_object_or_404(Quiz, name=name)
     counter = request.session.get('counter')
-    question, done = quiz.getQuestion(counter)
+    question= quiz.getQuestion(counter)
+
+    print("question number " + str(counter) + ": ")
+    print(question)
     # set the appropriate parameter in the session
     if request.method == 'POST':
         answerIndex = request.POST.get('answers')
@@ -46,11 +45,14 @@ def questionView(request, name):
         print(answer.get_field())
         setParameter(request, question.get_topic(), answer.get_field())
         print(request.session.items())
+        counter += 1
+        if quiz.noMoreQuestions(counter):
+            palName = getPal(request)
+            return palProfile(request, palName)
+        request.session['counter'] = counter
+        question = quiz.getQuestion(counter)
 
-    request.session['done'] = done
     form  = QuestionForm(question)
-    counter += 1
-    request.session['counter'] = counter
     return render(request, 'pals/question.html', {'form':form, 'quiz':quiz})
 
 def getPal(request):
@@ -64,8 +66,6 @@ def getPal(request):
 def new_session(request):
     request.session.clear()
     request.session['counter'] = 0
-    request.session['done'] = False
-    request.session['previous_question'] = None
 
 def setParameter(request, field, value):
     request.session[field] = value
