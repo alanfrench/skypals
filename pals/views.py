@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Pal, Quiz, Question
+from .models import Pal, Quiz, Question, Answer
 from django.template import RequestContext
 # stuff for forms
 from .forms import QuestionForm
 from django.views.generic.edit import FormView
+
+ANSWER_SET = Answer.objects.all()
 
 def indexView(request):
     context = RequestContext(request)
@@ -20,9 +22,8 @@ def palProfile(request,name):
 
 def quizView(request):
     """clean session variables and get the quiz/questions"""
-    request.session.clear()
+    new_session(request)
     quiz = get_object_or_404(Quiz, name='default')
-    # create_session_pal(request)
     return render(request, 'pals/quiz.html', {'quiz':quiz})
 
 def questionView(request, name):
@@ -30,28 +31,22 @@ def questionView(request, name):
     then get the question and increment the counter
     """
 
-    # if request.method == 'POST':
-    #     form = QuestionForm(request.POST)
-    #     if form.is_valid():
-    #         data = form.cleaned_data
-    #         print(data)
-
-    if 'counter' not in request.session:
-        request.session['counter'] = 0
-    if 'done' not in request.session:
-        request.session['done'] = False
-
-    if request.method == "POST":
-        print(request.read())
-
     if request.session['done']:
         palName = getPal(request)
         return palProfile(request, palName)
 
-
     quiz = get_object_or_404(Quiz, name=name)
     counter = request.session.get('counter')
     question, done = quiz.getQuestion(counter)
+    # set the appropriate parameter in the session
+    if request.method == 'POST':
+        answerIndex = request.POST.get('answers')
+        answer = ANSWER_SET.get(id=answerIndex)
+        print(answer)
+        print(answer.get_field())
+        setParameter(request, question.get_topic(), answer.get_field())
+        print(request.session.items())
+
     request.session['done'] = done
     form  = QuestionForm(question)
     counter += 1
@@ -66,12 +61,11 @@ def getPal(request):
     return palName
 
 
- ######################################################################
- # Functions for handling the users ideal pal
- ######################################################################
-def create_session_pal(request):
-    request.session['session_pal'] = Pal()
+def new_session(request):
+    request.session.clear()
+    request.session['counter'] = 0
+    request.session['done'] = False
+    request.session['previous_question'] = None
 
-def update_session_pal(request, topic, field):
-    current_pal = request.session['session_pal']
-    current_pal[topic] = field
+def setParameter(request, field, value):
+    request.session[field] = value
