@@ -5,10 +5,16 @@ class Pal(models.Model):
     name = models.CharField(max_length=20)
     # 0 means they're happy criminals, 3 means they're good citizens
     morality = models.IntegerField()
-    # what kind of weapons and armor they use
+    # A short descruption of the character
     profile=models.CharField(max_length=200)
+    # Fighting style
     characterClass=models.CharField(max_length=100)
-    classDetails = models.CharField(max_length=100)
+    # Are they a marriage option
+    marriageable = models.BooleanField()
+    # What is the highest level they can have (matters for late game)
+    maxLevel = models.IntegerField()
+    # Link to follower page on UESP
+    url = models.CharField(max_length=200)
 
 
     def __str__(self):
